@@ -49,8 +49,8 @@
                                     get_translation(key="translations.menu.skills") }}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#" id="hrefHobbies">{{
-                                    get_translation(key="translations.menu.hobbies") }}</a>
+                                <a class="nav-link" href="#" id="hrefPrivateprojects">{{
+                                    get_translation(key="translations.menu.privateprojects") }}</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#" id="hrefContact">{{

@@ -99,7 +99,7 @@ td:first-child, th:first-child {
     visibility: hidden;
 }
 
-.aboutPage, .hobbies, .skills, .projects, .aboutme, .contact, .legalInfo {
+.aboutPage, .privateprojects, .skills, .projects, .aboutme, .contact, .legalInfo {
     margin: 10px;
     
     font-size: smaller;

@@ -58,8 +58,8 @@ function initListeners() {
         fadeAndLoad( "skills.html");
     });
 
-    $("#hrefHobbies").on("click",function()  {
-        fadeAndLoad( "hobbies.html");
+    $("#hrefPrivateprojects").on("click",function()  {
+        fadeAndLoad( "privateprojects.html");
     });
 
     $("#hrefContact").on("click",function(){

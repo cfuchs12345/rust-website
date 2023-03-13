@@ -1,0 +1,6 @@
+<p class="privateprojects">
+    {{ get_translation(key="translations.privateprojects.title") }}
+    <br/><br/>
+    {{ get_translation(key="translations.privateprojects.text") }}
+</p>
+

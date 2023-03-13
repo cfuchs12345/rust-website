@@ -85,12 +85,12 @@ pub(crate) async fn contact(data: web::Data<AppData>, req: HttpRequest) -> impl 
     HttpResponse::Ok().body(rendered)
 }
 
-pub(crate) async fn hobbies(data: web::Data<AppData>, req: HttpRequest) -> impl Responder {
+pub(crate) async fn privateprojects(data: web::Data<AppData>, req: HttpRequest) -> impl Responder {
     set_language_for_page(req);
 
     let mut ctx = Context::new();
-    ctx.insert("name", "projects.html");
-    let rendered = match data.app_data_templates.render("tera/hobbies.html.tera", &ctx) {
+    ctx.insert("name", "privateprojects.html");
+    let rendered = match data.app_data_templates.render("tera/privateprojects.html.tera", &ctx) {
         Ok(t) => t,
         Err(e) => e.to_string()
     };

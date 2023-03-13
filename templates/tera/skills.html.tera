@@ -1,5 +1,5 @@
 <p class="skills">
-    {{ get_translation(key="translations.skills.title") }}&nbsp;&nbsp;<span class="custom-github-link"><i>({{ get_translation(key="translations.skills.github-text") }}<a href="https://github.com/cfuchs12345" alt="{{ get_translation(key='translations.skills.alt-link-text') }}">https://github.com/cfuchs12345</a>)</i></span>
+    {{ get_translation(key="translations.skills.title") }}
     <br/><br/>
     {{ get_translation(key="translations.skills.text") }}
 </p>

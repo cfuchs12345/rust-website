@@ -82,7 +82,7 @@ async fn main() -> std::io::Result<()> {
             .service(web::resource("/aboutPage.html").route(web::get().to(routes::about_page)))
             .service(web::resource("/skills.html").route(web::get().to(routes::skills)))
             .service(web::resource("/projects.html").route(web::get().to(routes::projects)))
-            .service(web::resource("/hobbies.html").route(web::get().to(routes::hobbies)))
+            .service(web::resource("/privateprojects.html").route(web::get().to(routes::privateprojects)))
             .service(web::resource("/contact.html").route(web::get().to(routes::contact)))
             .service(web::resource("/legalInfo.html").route(web::get().to(routes::legal_info)))
             .service(fs::Files::new("/static", "./static").show_files_listing())
@@ -163,8 +163,16 @@ fn get_translation_from_file(mut key_split: &mut std::str::Split<&str>, language
         }
     }
     else {
-        let next_json_value = json_value.get(current_key.unwrap()).unwrap();
+        let next_value = json_value.get(current_key.unwrap());
 
-        return get_translation_from_file(&mut key_split, language, &next_json_value);
+        match next_value {
+            Some(next_value) => {
+                return get_translation_from_file(&mut key_split, language, &next_value);
+            },
+            None => {
+                log::error!("value for current key {:?} not found in translation file", current_key);
+                None
+            }
+        }
     }
 }
