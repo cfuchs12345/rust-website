@@ -1,6 +1,5 @@
 <p class="aboutme">
     <img src="/static/images/foto_1.jpg" alt="{{ get_translation(key='translations.aboutme.alt_photo') }}" style="float: left; margin: 10px"/>
-    {{ get_translation(key="translations.aboutme.title") }}
-    <br/><br/>
+    {{ get_translation(key="translations.aboutme.title") }}<br/><br/>
     {{ get_translation(key="translations.aboutme.text") }}
 </p>

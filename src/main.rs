@@ -44,7 +44,7 @@ async fn main() -> std::io::Result<()> {
     let config = config::get_config();
     let conn = database::connect().await.unwrap();
 
-    let mut tera = match Tera::new("/templates/**/*") {
+    let mut tera = match Tera::new("templates/**/*") {
         Ok(t) => t,
         Err(e) => {
             println!("Parsing error(s): {}", e);
