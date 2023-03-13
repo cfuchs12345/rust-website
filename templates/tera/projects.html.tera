@@ -1,0 +1,53 @@
+<p class="projects">
+    <b>{{ get_translation(key="translations.projects.title") }}</b>
+<div class="project-container">
+    <div>
+        <table class="">
+            <caption></caption>
+            <thead>
+                <tr>
+                    <th class="col-sm-2">{{ get_translation(key="translations.projects.businessarea") }}</th>
+                    <th class="col-sm-2">{{ get_translation(key="translations.projects.role") }}</th>
+                    <th class="col-sm-8">{{ get_translation(key="translations.projects.summary") }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if projects %}
+                {% for project in projects %}
+                <tr>
+                    <td class="col-sm-2">
+                    {% if get_language() == "de" %}
+                        {{project.2.0.name_de}}
+                    {% else %}
+                        {{project.2.0.name_en}}
+                    {% endif %}
+                    </td>
+                    <td class="col-sm-2">
+                        {% for role in project.3 %}
+                    {% if get_language() == "de" %}
+                        <div class="custom-no-break">{{role.name_de}}</div>
+                    {% else %}
+                        <div class="custom-no-break">{{role.name_en}}</div>
+                    {% endif %}
+                    {% endfor %}
+                    </td>               
+                    <td class="col-sm-8">
+                        {% if get_language() == "de" %}
+                        {{project.0.summary_de}}
+                        {% else %}
+                        {{project.0.summary_en}}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="3" class="col">{{ get_translation(key="translations.projects.no_projects_found") }}
+                    </td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</p>

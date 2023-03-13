@@ -1,0 +1,10 @@
+docker run -d \
+--name "rust-website" \
+--network web \
+-p8083:8080 \
+-v$(pwd)/projectlist-website.db:/projectlist-website.db \
+-v$(pwd)/.env:/.env -v$(pwd)/translations.json:/translations.json  \
+-v$(pwd)/static:/static \
+-v$(pwd)/templates:/templates \
+--label-file ./labels \
+docker-rust-website

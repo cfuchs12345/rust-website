@@ -1,0 +1,5 @@
+<p class="contact">
+    {{ get_translation(key="translations.contact.title") }}
+    <br/><br/>
+    {{ get_translation(key="translations.contact.text") }}
+</p>

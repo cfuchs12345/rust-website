@@ -1,0 +1,74 @@
+{% extends "tera/base.html.tera" %}
+
+{% block meta %}
+<meta name="language" content="{{ get_language()}}">
+{% endblock meta %}
+
+{% block content %}
+<div class="container" style="z-index: -1;">
+    <div class="row">
+        <div class="col-12 custom-header-line">
+            <a href="https://internet.nl/" target="_blank"><img src="/static/images/embed-badge-websitetest.svg" alt="internet nl badge website"  class="custom-internetnl-badge"/></a>
+            <a href="https://internet.nl/" target="_blank"><img src="/static/images/embed-badge-emailtest.svg" alt="internet nl badge mailserver"  class="custom-internetnl-badge"/></a>
+        </div>
+    </div>
+    <div class="row justify-content-end w-100">
+        <div class="col-12 custom-language-line w-100">
+        <a href="#" id="hrefGermanLanguage"><img class="custom-language-img" src="/static/images/flag-for-flag-germany-svgrepo-com.svg" alt=""></a>
+        <a href="#" id="hrefEnglishLanguage"><img class="custom-language-img" src="/static/images/flag-for-flag-united-kingdom-svgrepo-com.svg" alt=""></a>
+        </div>
+    </div>
+    <div class="row custom-background-image">
+        <div class="col-2">
+            <div class="container-fluid">
+                <nav class="navbar navbar-expand-lg navbar-light bs-side-navbar">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse"
+                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse custom-nav-rounded-border" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="#" id="hrefAboutMe">{{ get_translation(key="translations.menu.aboutme") }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" id="hrefProjects">{{ get_translation(key="translations.menu.projects") }}</a>
+                            </li>                            
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" id="hrefSkills">{{ get_translation(key="translations.menu.skills") }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"  id="hrefHobbies">{{ get_translation(key="translations.menu.hobbies") }}</a>
+                            </li>
+                            <li class="nav-item"><br></li>
+                            <li class="nav-item"><br></li>
+                            <li class="nav-item"><br></li>
+                            <li class="nav-item"><br></li>
+                            <li class="nav-item"><br></li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"  id="hrefContact">{{ get_translation(key="translations.menu.contact") }}</a>
+                            </li>
+                            <li class="nav-item"><br></li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"  id="hrefLegalInfo">{{ get_translation(key="translations.menu.legalinfo") }}</a>
+                            </li>
+                            <li class="nav-item"><br></li>
+                            <li class="nav-item"><br></li>
+                            <li class="nav-item"><br></li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"  id="hrefAboutPage"><span class="smaller_font">{{ get_translation(key="translations.menu.aboutpage") }}</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <div class="col-10">
+            <!-- right side / main display-->
+            <div id="content" class="custom-notVisible"></div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

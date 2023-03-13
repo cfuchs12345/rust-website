@@ -1,0 +1,5 @@
+<p class="aboutPage">
+    {{ get_translation(key="translations.aboutpage.title") }}
+    <br/><br/>
+    {{ get_translation(key="translations.aboutpage.text") }}
+</p>

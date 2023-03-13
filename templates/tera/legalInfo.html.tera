@@ -1,0 +1,5 @@
+<p class="legalInfo">
+    {{ get_translation(key="translations.legalinfo.title") }}
+    <br/><br/>
+    {{ get_translation(key="translations.legalinfo.text") }}
+</p>

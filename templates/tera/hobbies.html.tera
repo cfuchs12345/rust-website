@@ -1,0 +1,6 @@
+<p class="hobbies">
+    {{ get_translation(key="translations.hobbies.title") }}
+    <br/><br/>
+    {{ get_translation(key="translations.hobbies.text") }}
+</p>
+
