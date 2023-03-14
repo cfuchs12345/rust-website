@@ -1,5 +1,12 @@
 pipeline {
     agent {label 'rust-slave'}
+
+    parameters {
+        string(
+        name: "CLEAN_UP", 
+        defaultValue: 'false', 
+        description: 'Do cleanup before build')
+    }
     options {
         copyArtifactPermission('docker/Docker-Webseite');
     }
@@ -21,6 +28,9 @@ pipeline {
             }
         }
         stage('Clean') {
+             when {
+                expression { params.CLEAN_UP != 'false' }
+            }
             steps {
                 sh "cargo clean"
                 sh "cargo clean --release"
@@ -63,7 +73,8 @@ pipeline {
             steps {
                 sh "ls -ltr target"
                 sh "ls -ltr target/debug"
-                zip zipFile: "target/rust_website_webserver.zip", archive: true, dir: "target/debug", overwrite: true, glob: "rustwebserver"
+                sh "ls -ltr target/release"
+                zip zipFile: "target/rust_website_webserver.zip", archive: true, dir: "target/release", overwrite: true, glob: "rustwebserver"
             }
         }
     }
