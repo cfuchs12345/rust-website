@@ -17,5 +17,6 @@ Cargo.lock
 # custom
 *.production
 *.db
+*.zip
 labels
 translations.json
