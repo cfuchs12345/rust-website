@@ -39,7 +39,12 @@ pipeline {
         }
         stage('pull artifact') {
             steps {
-                copyArtifacts projectName: "${params.source_project}"
+                sh "ls -ltr ."
+                sh "ls -ltr target/"
+
+                copyArtifacts projectName: "${params.source_project}", selector: lastSuccessful, target: "target/"
+
+                sh "ls -ltr target/"
 
                 unzip zipFile: "${params.artifact_file}"
             }
