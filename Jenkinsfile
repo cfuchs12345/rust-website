@@ -9,6 +9,12 @@ pipeline {
                 sh "rustup default stable"
             }
         }
+        stage('Clean') {
+            steps {
+                sh "cargo clean"
+                sh "cargo clean --release"
+            }
+        }
         stage('Build') {
             steps {
                 sh "cargo build --release"
