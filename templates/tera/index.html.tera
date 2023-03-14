@@ -5,7 +5,7 @@
 {% endblock meta %}
 
 {% block content %}
-<div class="container" style="z-index: -1;">
+<div class="container custom-content-container">
     <div class="row justify-content-end w-100 d-none d-md-block">
         <div class="col-sm-12 custom-header-line">
             <a href="https://internet.nl/" target="_blank"><img src="/static/images/embed-badge-websitetest.svg"

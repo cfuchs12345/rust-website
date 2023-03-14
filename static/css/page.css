@@ -54,8 +54,14 @@ td:first-child, th:first-child {
      border-left: none;
 }
 
+.custom-content-conainer {
+    z-index: -1;
+}
+
 .custom-header-line {
-    background-image: url('/static/images/logo.jpg'); height: 100px; background-repeat: no-repeat;
+    background-image: url('/static/images/logo.jpg');
+    height: 100px;
+    background-repeat: no-repeat;
     text-align: right;
     vertical-align: middle;
 }
@@ -70,10 +76,11 @@ td:first-child, th:first-child {
     width: 160px;
 }
 
-
 .navbar-toggler-icon {
-    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50"><path d="M 0 7.5 L 0 12.5 L 50 12.5 L 50 7.5 Z M 0 22.5 L 0 27.5 L 50 27.5 L 50 22.5 Z M 0 37.5 L 0 42.5 L 50 42.5 L 50 37.5 Z"/></svg>');
+    background-image: url('/static/images/icons8-menu.svg');
+    width: 26px;
 }
+
 @media only screen and (min-width: 900px) {
     .custom-background-image {
         background-image: url('/static/images/wrapper_header_bg.jpg');
