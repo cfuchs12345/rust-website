@@ -35,6 +35,8 @@ pipeline {
             steps {
                  sh "docker image rm ${params.IMAGE_NAME}:latest"
                  sh "docker image prune -a -f"
+                 sh "rm rustwebserver"
+                 sh "rm ${params.artifact_file}"
             }
         }
         stage('pull artifact') {
@@ -42,7 +44,7 @@ pipeline {
                 sh "ls -ltr ."
                 sh "ls -ltr target/"
 
-                copyArtifacts projectName: "${params.source_project}", selector: lastSuccessful, target: "target/"
+                copyArtifacts projectName: "${params.source_project}", selector: lastSuccessful(), target: "target/"
 
                 sh "ls -ltr target/"
 
