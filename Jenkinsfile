@@ -4,6 +4,17 @@ pipeline {
         copyArtifactPermission('docker/Docker-Webseite');
     }
     stages {
+        stage('checkout') {
+            steps {
+                checkout poll: false, scm: scmGit(
+                    branches: [[name: '*/master']], 
+                    extensions: [],
+                    userRemoteConfigs: 
+                    [[credentialsId: 'git-jenkins', 
+                    url: 'https://gitea.home-of-the-fox.duckdns.org/cfuchs113/rust-website.git'
+                    ]])
+            }
+        }
         stage('Init') {
             steps {
                 sh "rustup default stable"
