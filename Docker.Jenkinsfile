@@ -49,19 +49,28 @@ pipeline {
 
         stage('Build image') {
             steps {
-                 script {
-               echo "Bulding docker images"
-               def buildArgs = """\
+                script {
+                echo "Bulding docker images"
+                def buildArgs = """\
                 --build-arg UBUNTU_VERSION=${params.UBUNTU_VERSION} \
                 --build-arg HTTP_PORT=8080 \
                 -f Dockerfile \
+                --no-cache \
                 ."""
                 docker.build(
-                   "${params.IMAGE_NAME}:latest",
+                   "${params.IMAGE_NAME}:$BUILD_NUMBER",
                    buildArgs)
+                }
             }
+        }
+        stage('Tag image') {
+            steps {
+                script {
+                    echo "Tagging docker image"
+                    sh "docker tag ${params.IMAGE_NAME}:$BUILD_NUMBER ${params.IMAGE_NAME}:latest";
+                }
             }
-        }  
+        }
     }
     post{
         always{
