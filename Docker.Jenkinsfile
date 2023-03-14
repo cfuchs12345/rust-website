@@ -31,6 +31,12 @@ pipeline {
     }
 
     stages {
+        stage('Clean') {
+            steps {
+                 sh "docker image rm ${params.IMAGE_NAME}:latest"
+                 sh "docker image prune -a -f"
+            }
+        }
         stage('pull artifact') {
             steps {
                 copyArtifacts projectName: "${params.source_project}"
