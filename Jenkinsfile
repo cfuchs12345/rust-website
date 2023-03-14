@@ -71,9 +71,6 @@ pipeline {
         }
         stage("Create Artifact") {
             steps {
-                sh "ls -ltr target"
-                sh "ls -ltr target/debug"
-                sh "ls -ltr target/release"
                 zip zipFile: "target/rust_website_webserver.zip", archive: true, dir: "target/release", overwrite: true, glob: "rustwebserver"
             }
         }
