@@ -33,10 +33,10 @@ pipeline {
     stages {
         stage('Clean') {
             steps {
-                 sh "docker image rm ${params.IMAGE_NAME}:latest"
-                 sh "docker image prune -a -f"
-                 sh "rm rustwebserver"
-                 sh "rm ${params.artifact_file}"
+                 sh "docker image rm ${params.IMAGE_NAME}:latest || true"
+                 sh "docker image prune -a -f || true"
+                 sh "rm rustwebserver || true"
+                 sh "rm ${params.artifact_file} || true"
             }
         }
         stage('pull artifact') {
