@@ -110,18 +110,17 @@ pub(crate) async fn legal_info(data: web::Data<AppData>, req: HttpRequest) -> im
 }
 
 fn set_language_for_page(req: HttpRequest) {
-    let query = split_query_string( &req.query_string());
+    let query = split_query_string( req.query_string());
     let language_param = query.get("language");
 
     let language_header = get_language_from_header(&req);
     LANGUAGE.with(
         |cell| {
             let mut language_ref = cell.borrow_mut();
-            if language_param.is_some() {
-                language_ref.replace(language_param.unwrap().to_string());
-            }
-            else {
-                language_ref.replace(language_header);
+
+            match language_param {
+                Some(lang) => language_ref.replace(lang.to_string()),
+                None => language_ref.replace(language_header)
             }
         }
     );
@@ -130,24 +129,21 @@ fn set_language_for_page(req: HttpRequest) {
 fn get_language_from_header(req: &HttpRequest) -> String {
     let header = req.headers().get("accept-language");
 
-    if header.is_some()  {
-        let val = header.unwrap();
-        if ! val.is_empty() {
-            let formatted =  format!("{:?}", val).replace("\"", "");
-
-            if formatted.to_lowercase().starts_with("de") {
-                return "de".to_string();
-            }
+    if let Some(val) = header {
+        let formatted =  format!("{:?}", val).replace('\"'," ");
+        
+        if formatted.to_lowercase().starts_with("de") {
+            return "de".to_string();
         }
     }
-
+  
     "en".to_string()
 }
 
 
 fn split_query_string(string: &str) -> HashMap<&str, &str> {
-    if string.trim().len() == 0 || ! string.contains("=") {
+    if string.is_empty()|| ! string.contains('=') {
         return HashMap::new();
     }
-    string.split(",").map(|s| s.split_at(s.find("=").unwrap())).map(|(key, val)| (key, &val[1..])).collect()
+    string.split(',').map(|s| s.split_at(s.find('=').unwrap())).map(|(key, val)| (key, &val[1..])).collect()
 }

@@ -1,5 +1,6 @@
 use actix_web::HttpRequest;
 use actix_web::{get, post, web,  HttpResponse, Responder};
+use entities::project::ProjectTuple;
 use serde::{Deserialize, Serialize};
 
 use services::businessareaservice;
@@ -17,6 +18,10 @@ struct JsonErrorResult {
     error: String
 }
 
+
+
+
+
 #[get("/list")]
 pub(crate) async fn list_projects(data: web::Data<AppData>,  req: HttpRequest) -> impl Responder {
     if ! api_key_successfully_validated(&data, &req) {
@@ -25,8 +30,8 @@ pub(crate) async fn list_projects(data: web::Data<AppData>,  req: HttpRequest) -
 
     let projects_result = projectservice::get_all(&data.app_data_conn).await;
 
-    let result:Result<&Vec<(entities::project::Model, Vec<entities::client::Model>, Vec<entities::businessarea::Model>,Vec<entities::role::Model>, Vec<entities::person::Model>, Vec<entities::technology::Model>)>, serde_json::Value>;
-    let projects: Vec<(entities::project::Model, Vec<entities::client::Model>, Vec<entities::businessarea::Model>,Vec<entities::role::Model>, Vec<entities::person::Model>, Vec<entities::technology::Model>)>;
+    let result:Result<&Vec<ProjectTuple>, serde_json::Value>;
+    let projects: Vec<ProjectTuple>;
 
     match projects_result {
         Ok(tmp) => {
@@ -59,15 +64,15 @@ pub(crate) async fn show_project(data: web::Data<AppData>, req: HttpRequest, pat
 
     let id = path.into_inner();
 
-    let result:Result<&(entities::project::Model,  Vec<entities::client::Model>, Vec<entities::businessarea::Model>, Vec<entities::role::Model>, Vec<entities::person::Model>, Vec<entities::technology::Model>), serde_json::Value>;
+    let result:Result<&ProjectTuple, serde_json::Value>;
 
     let found_projects_result = projectservice::get(id, &data.app_data_conn).await;
-    let found_projects:Vec<(entities::project::Model,  Vec<entities::client::Model>, Vec<entities::businessarea::Model>, Vec<entities::role::Model>, Vec<entities::person::Model>, Vec<entities::technology::Model>)>;
+    let found_projects:Vec<ProjectTuple>;
 
     match found_projects_result {
         Ok(e) => {
             found_projects = e;
-            match found_projects.iter().next() {
+            match found_projects.first() {
                 Some(found_project) => {
                     result = Ok(found_project);
                 },
@@ -145,7 +150,7 @@ fn api_key_successfully_validated(data: &web::Data<AppData>, req: &HttpRequest) 
             match header_value.to_str() {
                 Ok(header_value_as_str) => {
                     match data.app_data_config.get_string("api_key") {
-                        Ok(reference_key) => if reference_key == header_value_as_str.to_string() {
+                        Ok(reference_key) => if reference_key == header_value_as_str {
                             log::debug!("provided API key matches reference key. Successfully authentication successful");
                             true
                         }

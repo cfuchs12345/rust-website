@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use sea_orm::entity::prelude::*;
+use crate ::{common, person, businessarea, client, role, technology};
 
-use crate::common;
 
 
 #[derive(Clone, Hash, Debug, PartialEq, Eq, DeriveEntityModel, Deserialize, Serialize, Default)]
@@ -36,6 +36,15 @@ pub struct ProjectAndDependencies {
     pub persons: Vec<i16>,
     pub technologies: Vec<i16>
 }
+
+#[derive(Default, Hash, Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
+pub struct ProjectTuple (
+    pub Model, 
+    pub Vec<client::Model>, 
+    pub Vec<businessarea::Model>,
+    pub Vec<role::Model>,
+    pub Vec<person::Model>, 
+    pub Vec<technology::Model>);
 
 impl common::DBEntity for Model {
     fn get_id(&self) -> &i16 {

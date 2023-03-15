@@ -1,6 +1,6 @@
 use ::entities::project::Column;
-use entities::project::ProjectAndDependencies;
-use ::entities::project::{ActiveModel as ProjectActive, Entity as Project, Model as ProjectModel};
+use entities::project::{ProjectAndDependencies, ProjectTuple};
+use ::entities::project::{ActiveModel as ProjectActive, Entity as Project};
 use ::entities::project_client::{ActiveModel as ProjectClientActive, Entity as ProjectClient};
 use ::entities::project_businessarea::{ActiveModel as ProjectBusinessareaActive, Entity as ProjectBusinessarea};
 use ::entities::project_person::{ActiveModel as ProjectPersonActive, Entity as ProjectPerson};
@@ -8,11 +8,11 @@ use ::entities::project_role::{ActiveModel as ProjectRoleActive, Entity as Proje
 use ::entities::project_technology::{
     ActiveModel as ProjectTechnologyActive, Entity as ProjectTechnology,
 };
-use ::entities::client::{Entity as Client, Model as ClientModel};
-use ::entities::businessarea::{Entity as Businessarea, Model as BusinessareaModel};
-use ::entities::person::{Entity as Person, Model as PersonModel};
-use ::entities::role::{Entity as Role, Model as RoleModel};
-use ::entities::technology::{Entity as Technology, Model as TechnologyModel};
+use ::entities::client::{Entity as Client};
+use ::entities::businessarea::{Entity as Businessarea};
+use ::entities::person::{Entity as Person};
+use ::entities::role::{Entity as Role};
+use ::entities::technology::{Entity as Technology};
 use ::entities::{project_client, project_person, project_role, project_technology, project_businessarea};
 
 use sea_orm::*;
@@ -22,14 +22,7 @@ pub async fn get(
     project_id: i16,
     db: &DbConn,
 ) -> Result<
-    Vec<(
-        ProjectModel,
-        Vec<ClientModel>,
-        Vec<BusinessareaModel>,
-        Vec<RoleModel>,
-        Vec<PersonModel>,
-        Vec<TechnologyModel>,
-    )>,
+    Vec<ProjectTuple>,
     DbErr,
 >{
     let projects = Project::find_by_id(project_id).all(db).await?;
@@ -66,21 +59,14 @@ pub async fn get(
     Ok(projects
         .iter()
         .map(
-            |p| -> (
-                ProjectModel,
-                    Vec<ClientModel>,
-                    Vec<BusinessareaModel>,
-                Vec<RoleModel>,
-                Vec<PersonModel>,
-                Vec<TechnologyModel>,
-            ) {
+            |p| -> ProjectTuple {
                     let clients = clients_it.next().unwrap().to_owned();
                     let businessareas = businessareas_it.next().unwrap().to_owned();
                 let roles = roles_it.next().unwrap().to_owned();
                 let persons = persons_it.next().unwrap().to_owned();
                 let technologies = technologies_it.next().unwrap().to_owned();
 
-                    (p.to_owned(), clients, businessareas, roles, persons, technologies)
+                ProjectTuple(p.to_owned(), clients, businessareas, roles, persons, technologies)
             },
         )
         .collect())
@@ -89,14 +75,7 @@ pub async fn get(
 pub async fn get_all(
     db: &DbConn,
 ) -> Result<
-    Vec<(
-        ProjectModel,
-        Vec<ClientModel>,
-        Vec<BusinessareaModel>,
-        Vec<RoleModel>,
-        Vec<PersonModel>,
-        Vec<TechnologyModel>,
-    )>,
+    Vec<ProjectTuple>,
     DbErr,
 > {
     let projects = Project::find()
@@ -137,21 +116,14 @@ pub async fn get_all(
     Ok(projects
         .iter()
         .map(
-            |p| -> (
-                ProjectModel,
-                Vec<ClientModel>,
-                Vec<BusinessareaModel>,
-                Vec<RoleModel>,
-                Vec<PersonModel>,
-                Vec<TechnologyModel>,
-            ) {
+            |p| -> ProjectTuple {
                 let clients = clients_it.next().unwrap().to_owned();
                 let businessareas = businessareas_it.next().unwrap().to_owned();
                 let roles = roles_it.next().unwrap().to_owned();
                 let persons = persons_it.next().unwrap().to_owned();
                 let technologies = technologies_it.next().unwrap().to_owned();
 
-                (p.to_owned(), clients, businessareas, roles, persons, technologies)
+                ProjectTuple(p.to_owned(), clients, businessareas, roles, persons, technologies)
             },
         )
         .collect())

@@ -1,8 +1,8 @@
-use std::{collections::{HashMap}, cell::RefCell};
+use std::{cell::RefCell, collections::HashMap};
 
 use ::config::Config;
 use actix_files as fs;
-use actix_web::{web, App, HttpServer, Result, middleware::Logger};
+use actix_web::{middleware::Logger, web, App, HttpServer, Result};
 
 use sea_orm::DatabaseConnection;
 use tera::Tera;
@@ -32,9 +32,6 @@ lazy_static! {
 // no need to store the information per client
 thread_local!(static LANGUAGE: RefCell<Option<String>> = RefCell::new(None));
 
-
-
-
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenvy::dotenv().ok();
@@ -51,21 +48,19 @@ async fn main() -> std::io::Result<()> {
             ::std::process::exit(1);
         }
     };
-    let bind_address = config.get_string("bind_address"); 
+    let bind_address = config.get_string("bind_address");
 
     tera.register_function("get_translation", get_translation_value);
     tera.register_function("get_language", get_language_value);
 
     database::migrate(&conn).await;
 
-
     let app_data = AppData {
         app_data_templates: tera,
         app_data_conn: conn,
         app_data_config: config,
     };
-    
-    
+
     HttpServer::new(move || {
         App::new()
             .wrap(Logger::default())
@@ -74,7 +69,7 @@ async fn main() -> std::io::Result<()> {
                 web::scope("/projects")
                     .service(project_routes::list_projects)
                     .service(project_routes::show_project)
-                    .service(project_routes::save_projects)
+                    .service(project_routes::save_projects),
             )
             .service(web::resource("/").route(web::get().to(routes::index)))
             .service(web::resource("/index.html").route(web::get().to(routes::index)))
@@ -82,96 +77,101 @@ async fn main() -> std::io::Result<()> {
             .service(web::resource("/aboutPage.html").route(web::get().to(routes::about_page)))
             .service(web::resource("/skills.html").route(web::get().to(routes::skills)))
             .service(web::resource("/projects.html").route(web::get().to(routes::projects)))
-            .service(web::resource("/privateprojects.html").route(web::get().to(routes::privateprojects)))
+            .service(
+                web::resource("/privateprojects.html")
+                    .route(web::get().to(routes::privateprojects)),
+            )
             .service(web::resource("/contact.html").route(web::get().to(routes::contact)))
             .service(web::resource("/legalInfo.html").route(web::get().to(routes::legal_info)))
             .service(fs::Files::new("/static", "./static").show_files_listing())
-    })   
+    })
     .bind(bind_address.unwrap())?
     .run()
     .await
 }
 
-fn get_language_value<'a>(_args: &'a HashMap<String, tera::Value>) -> Result<tera::Value, tera::Error> {
+fn get_language_value(_args: &HashMap<String, tera::Value>) -> Result<tera::Value, tera::Error> {
     let language = get_language();
 
     Ok(tera::to_value(language).unwrap())
 }
 
-fn get_translation_value<'a>(args: &'a HashMap<String, tera::Value>) -> Result<tera::Value, tera::Error> {
-    let key_value = args.get("key");
-
+fn get_translation_value(args: &HashMap<String, tera::Value>) -> Result<tera::Value, tera::Error> {
     let language = get_language();
+    match args.get("key") {
+        Some(key) => {
+            let key_str = key.as_str().unwrap();
+            let mut key_split = key_str.split('.'); 
 
-    if key_value.is_some() {
-        let key_str = key_value.unwrap().as_str().unwrap();   
-        let mut key_split = key_str.split(".");
-        
-        let root_key = key_split.next().unwrap();// first is normally the root node "translation"
-        
-        let root_value = TRANSLATIONS.get(root_key).unwrap(); 
-        let translation = get_translation_from_file(&mut key_split, language, root_value);
+            let root_key = key_split.next().unwrap(); // first is normally the root node "translation"
 
-        return Ok(tera::to_value(translation.unwrap_or(format!("no translation found for key {}", key_str).to_string())).unwrap());
+            let root_value = TRANSLATIONS.get(root_key).unwrap();
+            let translation = get_translation_from_file(&mut key_split, language, root_value);
+
+            Ok(tera::to_value(
+                translation.unwrap_or(format!("no translation found for key {}", key_str)),
+            )
+            .unwrap())
+        }
+        None => Ok(tera::to_value("no translation found").unwrap()),
     }
-
-    Ok(tera::to_value("no translation found").unwrap())
 }
 
 fn get_language() -> String {
-    let language = LANGUAGE.with(
-        |cell| -> String {
-            let language = cell.borrow();
-            if language.is_some() {
-                let x = language.as_ref().unwrap();
-                return x.to_string();
-            }
-            return "en".to_string();
-        }
-    );
+    LANGUAGE.with(|cell| -> String {
+        let language = cell.borrow();
 
-    language
+        match language.as_deref() {
+            Some(language) => {
+                language.to_string()
+            },
+            None => "en".to_string()
+        }
+    })
 }
 
-fn get_translation_from_file(mut key_split: &mut std::str::Split<&str>, language: String, json_value: &serde_json::value::Value) -> Option<String> {
-    let current_key = key_split.next();
-    
-    if current_key.is_none() { // no more keys left to iterate over, we are on the language leaf level hopefully
-        
-        let val_for_lang_opt = json_value.get(language);
+fn get_translation_from_file(
+    key_split: &mut std::str::Split<char>,
+    language: String,
+    json_value: &serde_json::value::Value,
+) -> Option<String> {
+    let current_key_opt = key_split.next();
 
-        if val_for_lang_opt.is_none()  {
-            return None;
+    match current_key_opt {
+        Some(current_key) => {
+            let next_value = json_value.get(current_key);
+
+            match next_value {
+                Some(next_value) => get_translation_from_file(key_split, language, next_value),
+                None => {
+                    log::error!(
+                        "value for current key {:?} not found in translation file",
+                        current_key
+                    );
+                    None
+                }
+            }
         }
-        let val_for_lang  = val_for_lang_opt.unwrap();
+        None => {
+            let val_for_lang_opt = json_value.get(language);
 
-        if val_for_lang.is_array() {
-            let array = val_for_lang.as_array().unwrap();
-            let mut vec: Vec<String> = Vec::new();
+            match val_for_lang_opt {
+                Some(val_for_lang) => {
+                    if val_for_lang.is_array() {
+                        let array = val_for_lang.as_array().unwrap();
+                        let mut vec: Vec<String> = Vec::new();
 
-            array.iter().fold( &mut vec, |vec, val| {
-                vec.push(val.as_str().unwrap().to_string()); 
-                vec});
+                        array.iter().fold(&mut vec, |vec, val| {
+                            vec.push(val.as_str().unwrap().to_string());
+                            vec
+                        });
 
-            Some(vec.join("\n").to_string())
-        }
-        else if val_for_lang.is_string(){
-            Some(val_for_lang.as_str().unwrap().to_string())
-        }
-        else {
-            None
-        }
-    }
-    else {
-        let next_value = json_value.get(current_key.unwrap());
-
-        match next_value {
-            Some(next_value) => {
-                return get_translation_from_file(&mut key_split, language, &next_value);
-            },
-            None => {
-                log::error!("value for current key {:?} not found in translation file", current_key);
-                None
+                        Some(vec.join("\n"))
+                    } else {
+                        Some(val_for_lang.as_str().unwrap().to_string())
+                    }
+                }
+                None => None,
             }
         }
     }
