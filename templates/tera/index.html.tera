@@ -36,31 +36,31 @@
 
                     <div class="collapse navbar-collapse custom-nav-rounded-border" id="navbar_id">
                         <ul class="navbar-nav mr-auto">
-                            <li class="nav-item active">
+                            <li class="nav-item active" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
                                 <a class="nav-link" href="#" id="hrefAboutMe">{{
                                     get_translation(key="translations.menu.aboutme") }}</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
                                 <a class="nav-link" href="#" id="hrefProjects">{{
                                     get_translation(key="translations.menu.projects") }}</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
                                 <a class="nav-link" href="#" id="hrefSkills">{{
                                     get_translation(key="translations.menu.skills") }}</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
                                 <a class="nav-link" href="#" id="hrefPrivateprojects">{{
                                     get_translation(key="translations.menu.privateprojects") }}</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
                                 <a class="nav-link" href="#" id="hrefContact">{{
                                     get_translation(key="translations.menu.contact") }}</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
                                 <a class="nav-link" href="#" id="hrefLegalInfo">{{
                                     get_translation(key="translations.menu.legalinfo") }}</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
                                 <a class="nav-link" href="#" id="hrefAboutPage"><span class="smaller_font">{{
                                         get_translation(key="translations.menu.aboutpage") }}</span></a>
                             </li>
