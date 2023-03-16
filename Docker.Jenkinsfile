@@ -8,12 +8,12 @@ pipeline {
             description: '')
             string(
             name: "source_project",
-            defaultValue: 'Rust/(Rust) Projektlist Tool',
+            defaultValue: 'rust/(Rust) Webseite',
             description: 'source project that generates the rust executable',
             )
              string(
             name: "artifact_file",
-            defaultValue: 'target/rust_projectlisttool_webserver.zip',
+            defaultValue: 'target/rust_website_webserver.zip',
             description: 'artifact name of the source project',
             )        
             string(
@@ -22,7 +22,7 @@ pipeline {
             description: 'version of ubuntu base image')
             string(
             name: "IMAGE_NAME", 
-            defaultValue: 'docker-rust-projectlisttool', 
+            defaultValue: 'docker-rust-website', 
             description: 'name of the image')
    
         booleanParam(
