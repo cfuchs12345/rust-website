@@ -24,11 +24,19 @@ pipeline {
             name: "IMAGE_NAME", 
             defaultValue: 'docker-rust-website', 
             description: 'name of the image')
-   
-        booleanParam(
-           name: "PushImage", 
-           defaultValue: false)
+            string(
+            name: "DOCKER_REGISTRY",
+            defaultValue: 'docker.registry.lan:5000',
+            description: 'registry location'
+            )
     }
+
+    environment {
+        registry = ""
+        registryCredential = ''
+        dockerImage = ''
+    }
+
 
     stages {
         stage('Clean') {
@@ -67,7 +75,15 @@ pipeline {
             steps {
                 script {
                     echo "Tagging docker image"
-                    sh "docker tag ${params.IMAGE_NAME}:$BUILD_NUMBER ${params.IMAGE_NAME}:latest";
+                    sh "docker tag ${params.IMAGE_NAME}:$BUILD_NUMBER ${params.DOCKER_REGISTRY}/${params.IMAGE_NAME}:latest";
+                }
+            }
+        }
+        stage('Deploy Image') {
+            steps{
+                script {
+                    echo "Push docker image to local registry"
+                    sh "docker push ${params.DOCKER_REGISTRY}/${params.IMAGE_NAME}:latest"
                 }
             }
         }
