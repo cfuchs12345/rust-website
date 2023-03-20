@@ -72,13 +72,19 @@ pipeline {
         }
         stage("Obfuscate Code") {
             steps {
+                // obfuscate pretty JS files
                 sh "javascript-obfuscator ./static/scripts/page_pretty.js --output ./static/scripts/page.js"
                 sh "javascript-obfuscator ./static/scripts/bootstrap.bundle_pretty.js --output ./static/scripts/bootstrap.bundle.js"
+                // delete pretty JS files
+                sh "rm static/scripts/page_pretty.js"
+                sh "rm static/scripts/bootstrap.bundle_pretty.js"
             }
         }
         stage("Create Artifact") {
             steps {
                 zip zipFile: "target/rust_website_webserver.zip", archive: true, dir: "target/release", overwrite: true, glob: "rustwebserver"
+                zip zipFile: "target/rust_website_webserver.zip", archive: true, dir: ".", overwrite: false, glob: "static"
+                zip zipFile: "target/rust_website_webserver.zip", archive: true, dir: ".", overwrite: false, glob: "templates"
             }
         }
     }
