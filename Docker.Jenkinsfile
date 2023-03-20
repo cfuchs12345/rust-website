@@ -70,9 +70,9 @@ pipeline {
 
         stage('Build image') {
             steps {
-                sh "cp private/translations.json ."
-                sh "cp private/.env ."
-                sh "cp private/labels ."
+                sh "cp private/translations.json translations.json"
+                sh "cp private/.env .env"
+                sh "cp private/labels labels"
 
                 script {
                 echo "Bulding docker images"
