@@ -82,9 +82,13 @@ pipeline {
         }
         stage("Create Artifact") {
             steps {
-                zip zipFile: "target/rust_website_webserver.zip", archive: true, dir: "target/release", overwrite: true, glob: "rustwebserver"
-                zip zipFile: "target/rust_website_webserver.zip", archive: true, dir: ".", overwrite: false, glob: "static"
-                zip zipFile: "target/rust_website_webserver.zip", archive: true, dir: ".", overwrite: false, glob: "templates"
+                sh "mkdir target/zipfile_content"
+                echo "copying resources for zip file into target/zipfile_content"
+                sh "cp -r static target/zipfile_content"
+                sh "cp -r templates target/zipfile_content"
+                sh "cp target/release/rustwebserver target/zipfile_content"
+                echo "creating zip file"
+                zip zipFile: "target/rust_website_webserver.zip", archive: true, dir: "target/zipfile_content", overwrite: true
             }
         }
     }
