@@ -54,9 +54,30 @@ pipeline {
                 unzip zipFile: "${params.artifact_file}"
             }
         }
+         stage('checkout') {
+            steps {
+                def exists = fileExists 'private'
+                if (!exists){
+                    new File('private').mkdir()
+                }
+                dir ('private') {
+                    checkout poll: false, scm: scmGit(
+                        branches: [[name: '*/master']], 
+                        extensions: [],
+                        userRemoteConfigs: 
+                        [[credentialsId: 'git-jenkins', 
+                        url: 'https://gitea.home-of-the-fox.duckdns.org/cfuchs113/rust-website-private-config.git'
+                        ]])
+                }
+            }
+        }
 
         stage('Build image') {
             steps {
+                sh "cp private/translations.json ."
+                sh "cp private/.env ."
+                sh "cp private/labels ."
+
                 script {
                 echo "Bulding docker images"
                 def buildArgs = """\
@@ -88,6 +109,11 @@ pipeline {
                     sh "docker rmi ${params.IMAGE_NAME}:$BUILD_NUMBER || true"
                     sh "docker rmi ${params.DOCKER_REGISTRY}/${params.IMAGE_NAME}:$BUILD_NUMBER || true"
                 }
+            }
+        }
+        stage('Create Artifact') {
+            steps {
+                echo "creating artifact with docker scripts and config"
             }
         }
     }
