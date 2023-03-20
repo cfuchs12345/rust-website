@@ -73,8 +73,8 @@ pipeline {
         }
         stage("Obfuscate Code") {
             steps {
-                sh "javascript-obfuscator .\static\scripts\page_pretty.js --output .\static\scripts\page.js"
-                sh "javascript-obfuscator .\static\scripts\bootstrap.bundle_pretty.js --output .\static\scripts\bootstrap.bundle.js"
+                sh "javascript-obfuscator ./static/scripts/page_pretty.js --output ./static/scripts/page.js"
+                sh "javascript-obfuscator ./static/scripts/bootstrap.bundle_pretty.js --output ./static/scripts/bootstrap.bundle.js"
             }
         }
         stage("Create Artifact") {
