@@ -5,9 +5,11 @@ FROM ubuntu:focal
 # need to repeat the variables after from since from consumes all args and they are not available afterwards
 ARG HTTP_PORT
 
-COPY /rustwebserver ./
 ADD /templates /templates
 ADD /static /static
+COPY /translations.json ./
+COPY /.env ./
+COPY /rustwebserver ./
 COPY /entrypoint.sh ./
 
 
