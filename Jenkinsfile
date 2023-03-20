@@ -25,7 +25,6 @@ pipeline {
         stage('Init') {
             steps {
                 sh "rustup default stable"
-                sh "apt install npm"
                 sh "npm i -g javascript-obfuscator"
             }
         }
