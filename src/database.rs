@@ -17,9 +17,7 @@ pub async fn connect() -> Result<DatabaseConnection, DbErr> {
 
     // establish connection to database and apply migrations
     // -> create post table if not exists
-    let con = Database::connect(&db_url).await;
-
-    con
+    Database::connect(&db_url).await
 }
 
 fn create_db_file(db_url: &str) {
