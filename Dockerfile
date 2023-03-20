@@ -12,6 +12,8 @@ COPY /.env ./
 COPY /rustwebserver ./
 COPY /entrypoint.sh ./
 
+RUN ls -altr
+
 
 RUN apt update \
 && apt install -y openssh-server \
