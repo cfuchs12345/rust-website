@@ -85,7 +85,8 @@ pipeline {
                     echo "Push docker image to local registry"
                     sh "docker push ${params.DOCKER_REGISTRY}/${params.IMAGE_NAME}:latest"
                     echo "Deleting local image"
-                    sh "docker rmi ${params.DOCKER_REGISTRY}:$BUILD_NUMBER"
+                    sh "docker rmi ${params.IMAGE_NAME}:$BUILD_NUMBER || true"
+                    sh "docker rmi ${params.DOCKER_REGISTRY}/${params.IMAGE_NAME}:$BUILD_NUMBER || true"
                 }
             }
         }
