@@ -6,6 +6,8 @@ FROM ubuntu:focal
 ARG HTTP_PORT
 
 COPY /rustwebserver ./
+ADD /templates /templates
+ADD /static /static
 COPY /entrypoint.sh ./
 
 
