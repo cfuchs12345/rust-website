@@ -25,6 +25,8 @@ pipeline {
         stage('Init') {
             steps {
                 sh "rustup default stable"
+                sh "apt install npm"
+                sh "npm i -g javascript-obfuscator"
             }
         }
         stage('Clean') {
@@ -67,6 +69,12 @@ pipeline {
                 step([$class: 'JavadocArchiver',
                       javadocDir: 'target/doc',
                       keepAll: false])
+            }
+        }
+        stage("Obfuscate Code") {
+            steps {
+                sh "javascript-obfuscator .\static\scripts\page_pretty.js --output .\static\scripts\page.js"
+                sh "javascript-obfuscator .\static\scripts\bootstrap.bundle_pretty.js --output .\static\scripts\bootstrap.bundle.js"
             }
         }
         stage("Create Artifact") {
