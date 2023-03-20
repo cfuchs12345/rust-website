@@ -56,12 +56,6 @@ pipeline {
         }
          stage('checkout') {
             steps {
-                script {
-                    def exists = fileExists 'private'
-                    if (!exists){
-                        new File('private').mkdir()
-                    }
-                }
                 dir ('private') {
                     checkout poll: false, scm: scmGit(
                         branches: [[name: '*/master']], 
