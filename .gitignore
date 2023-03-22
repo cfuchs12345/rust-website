@@ -20,6 +20,7 @@ package.json
 package-lock.json
 *.production
 *.db
+*.jpg
 *.zip
 labels
 translations.json
