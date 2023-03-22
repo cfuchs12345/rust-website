@@ -1,7 +1,7 @@
 <p class="aboutme">
     {{ get_translation(key="translations.aboutme.title") }}
 </p>
-<img src="/static/images/foto_1.jpg" alt="{{ get_translation(key='translations.aboutme.alt_photo') }}"/>
+<img src="/static/images/3424-B23-017(c)SoulPicture.jpg" alt="{{ get_translation(key='translations.aboutme.alt_photo') }}"/>
 <p class="aboutme">
     {{ get_translation(key="translations.aboutme.text") }}
 </p>
